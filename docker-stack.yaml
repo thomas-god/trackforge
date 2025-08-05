@@ -7,6 +7,9 @@ services:
   #     - "traefik.http.routers.trackforge-api.rule=Host(`trackforge.fr`) && PathPrefix(`/api`)"
   #     - "traefik.http.routers.trackforge-api.entrypoints=websecure"
   #     - "traefik.http.routers.trackforge-api.tls.certresolver=myresolver"
+  #     - "traefik.docker.network=traefik-public"
+  #   networks:
+  #     - traefik-public
   #   deploy:
   #     update_config:
   #       order: start-first
@@ -19,6 +22,9 @@ services:
       - "traefik.http.routers.trackforge-client.rule=Host(`trackforge.fr`)"
       - "traefik.http.routers.trackforge-client.entrypoints=websecure"
       - "traefik.http.routers.trackforge-client.tls.certresolver=myresolver"
+      - "traefik.docker.network=traefik-public"
+    networks:
+      - traefik-public
 
 volumes:
   letsencrypt:
