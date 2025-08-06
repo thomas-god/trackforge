@@ -1,18 +1,18 @@
 services:
-  # trackforge-api:
-  #   image: ghcr.io/thomas-god/trackforge-api:latest
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.services.trackforge-api.loadbalancer.server.port=9002"
-  #     - "traefik.http.routers.trackforge-api.rule=Host(`trackforge.fr`) && PathPrefix(`/api`)"
-  #     - "traefik.http.routers.trackforge-api.entrypoints=websecure"
-  #     - "traefik.http.routers.trackforge-api.tls.certresolver=myresolver"
-  #     - "traefik.docker.network=traefik-public"
-  #   networks:
-  #     - traefik-public
-  #   deploy:
-  #     update_config:
-  #       order: start-first
+  trackforge-api:
+    image: ghcr.io/thomas-god/trackforge-api:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.trackforge-api.loadbalancer.server.port=8000"
+      - "traefik.http.routers.trackforge-api.rule=Host(`trackforge.fr`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.trackforge-api.entrypoints=websecure"
+      - "traefik.http.routers.trackforge-api.tls.certresolver=myresolver"
+      - "traefik.docker.network=traefik-public"
+    networks:
+      - traefik-public
+    deploy:
+      update_config:
+        order: start-first
 
   trackforge-client:
     image: ghcr.io/thomas-god/trackforge-client:latest
