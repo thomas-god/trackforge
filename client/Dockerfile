@@ -15,7 +15,7 @@ COPY vite.config.ts ./
 COPY tsconfig.json ./
 COPY .gitignore ./
 COPY .npmrc ./
-# COPY .env.production ./.env
+COPY .env.production ./.env
 COPY src/ ./src
 COPY public/ ./public
 
