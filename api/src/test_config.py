@@ -24,6 +24,13 @@ def test_load_from_env_missing(monkeypatch):
         assert exc_info.value.missing_key == "MY_KEY"
 
 
+def test_load_from_env_default_value(monkeypatch):
+    with mock.patch.dict(os.environ, clear=True):
+        monkeypatch.delenv("MY_KEY", raising=False)
+
+        assert load_config_value("MY_KEY", default="default") == "default"
+
+
 def test_load_from_file(monkeypatch):
     with (
         mock.patch.dict(os.environ, clear=True),
@@ -36,11 +43,19 @@ def test_load_from_file(monkeypatch):
 
         assert load_config_value("MY_KEY") == "toto"
 
+
 def test_load_from_file_missing_file(monkeypatch):
-     with mock.patch.dict(os.environ, clear=True):
+    with mock.patch.dict(os.environ, clear=True):
         monkeypatch.setenv("MY_KEY_FILE", "toto")
 
         with pytest.raises(MissingConfigKeyError) as exc_info:
             load_config_value("MY_KEY")
 
         assert exc_info.value.missing_key == "MY_KEY"
+
+
+def test_load_from_file_default_value(monkeypatch):
+    with mock.patch.dict(os.environ, clear=True):
+        monkeypatch.setenv("MY_KEY_FILE", "toto")
+
+        assert load_config_value("MY_KEY", default="default") == "default"
