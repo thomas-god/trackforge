@@ -13,11 +13,11 @@ services:
     volumes:
       - assets:/app/assets
     environment:
-      - ENV: production
-      - NASA_USER_FILE: /run/secrets/trackforge_nasa_user
-      - NASA_PWD_FILE: /run/secrets/trackforge_nasa_pwd
-      - NASA_URL_FILE: /run/secrets/trackforge_nasa_url
-      - ASSETS: /app/assets/elevation
+      ENV: production
+      NASA_USER_FILE: /run/secrets/trackforge_nasa_user
+      NASA_PWD_FILE: /run/secrets/trackforge_nasa_pwd
+      NASA_URL_FILE: /run/secrets/trackforge_nasa_url
+      ASSETS: /app/assets/elevation
     secrets:
       - trackforge_nasa_user
       - trackforge_nasa_pwd
