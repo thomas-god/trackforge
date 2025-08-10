@@ -10,6 +10,18 @@ services:
       - "traefik.docker.network=traefik-public"
     networks:
       - traefik-public
+    volumes:
+      - assets:/app/assets
+    environment:
+      - ENV: production
+      - NASA_USER_FILE: /run/secrets/trackforge_nasa_user
+      - NASA_PWD_FILE: /run/secrets/trackforge_nasa_pwd
+      - NASA_URL_FILE: /run/secrets/trackforge_nasa_url
+      - ASSETS: /app/assets/elevation
+    secrets:
+      - trackforge_nasa_user
+      - trackforge_nasa_pwd
+      - trackforge_nasa_url
     deploy:
       update_config:
         order: start-first
@@ -27,7 +39,15 @@ services:
       - traefik-public
 
 volumes:
-  letsencrypt:
+  assets:
+
+secrets:
+  trackforge_nasa_user:
+    external: true
+  trackforge_nasa_pwd:
+    external: true
+  trackforge_nasa_url:
+    external: true
 
 networks:
   traefik-public:
