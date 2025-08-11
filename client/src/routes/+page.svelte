@@ -1,5 +1,6 @@
 <script lang="ts">
   import { PUBLIC_API_URL } from '$env/static/public';
+  import MeshViewer from '../components/molecules/MeshViewer.svelte';
 
   let files: FileList | undefined = $state(undefined);
   let value: string = $state('');
@@ -23,10 +24,14 @@
 
     let res = await fetch(`${PUBLIC_API_URL}/track`, { body, method: 'POST' });
     const blob = await res.blob();
-    meshes.push({ name: files.item(0)!.name, blob, url: URL.createObjectURL(blob) });
+    const url = URL.createObjectURL(blob);
+    meshes.push({ name: files.item(0)!.name, blob, url });
     files = undefined;
     value = '';
+    mesh = await blob.arrayBuffer();
   };
+
+  let mesh: ArrayBuffer | undefined = $state(undefined);
 </script>
 
 <div class="mt-3 flex flex-col items-center gap-3">
@@ -67,4 +72,6 @@
   {:else}
     <i>No mesh yet</i>
   {/each}
+
+  <MeshViewer {mesh} />
 </div>
