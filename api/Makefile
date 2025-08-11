@@ -9,3 +9,6 @@ tests:
 	uv run pytest
 
 all: format check tests
+
+dev:
+	uv run fastapi dev
