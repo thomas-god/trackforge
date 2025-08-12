@@ -91,6 +91,8 @@
   {/if}
 
   {#if showMesh}
-    <MeshViewer {mesh} />
+    <div class="w-full max-w-xl">
+      <MeshViewer {mesh} />
+    </div>
   {/if}
 </div>

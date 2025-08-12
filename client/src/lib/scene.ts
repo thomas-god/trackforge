@@ -25,9 +25,20 @@ addLights(scene);
 let renderer: WebGLRenderer;
 
 const resize = () => {
-  renderer.setSize(window.innerWidth / 2, window.innerHeight / 2);
-  camera.aspect = window.innerWidth / window.innerHeight;
+  if (!renderer) {
+    return;
+  }
+  const parent = renderer.domElement.parentElement;
+  if (!parent) {
+    return;
+  }
+  if (parent.clientWidth === 0 || parent.clientHeight === 0) {
+    return;
+  }
+  renderer.setSize(parent.clientWidth, parent.clientHeight);
+  camera.aspect = parent.clientWidth / parent.clientHeight;
   camera.updateProjectionMatrix();
+  renderer.render(scene, camera);
 };
 
 export const createScene = (el: HTMLCanvasElement) => {
