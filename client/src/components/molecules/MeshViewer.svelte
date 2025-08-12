@@ -1,13 +1,19 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { addToScene, createScene } from '$lib/scene';
+  import type { Mesh } from '../../routes/+page.svelte';
 
-  let { mesh }: { mesh: ArrayBuffer | undefined } = $props();
+  let { mesh }: { mesh: Mesh | undefined } = $props();
 
   let el: HTMLCanvasElement;
 
   $effect(() => {
-    addToScene(mesh);
+    if (mesh === undefined) {
+      return;
+    }
+    mesh.data.arrayBuffer().then((data) => {
+      addToScene(data);
+    });
   });
 
   onMount(() => {

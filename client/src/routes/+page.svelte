@@ -1,5 +1,15 @@
+<script module>
+  export interface Mesh {
+    name: string;
+    data: Blob;
+    url: string;
+  }
+</script>
+
 <script lang="ts">
   import { PUBLIC_API_URL } from '$env/static/public';
+  import Download from '../components/atoms/icons/Download.svelte';
+  import View from '../components/atoms/icons/View.svelte';
   import MeshViewer from '../components/molecules/MeshViewer.svelte';
 
   let files: FileList | undefined = $state(undefined);
@@ -12,7 +22,9 @@
   });
 
   let post_track_promise: Promise<void> | undefined = $state(undefined);
-  let meshes: { name: string; blob: Blob; url: string }[] = $state([]);
+  let mesh: Mesh | undefined = $state(undefined);
+  let showMesh = $state(false);
+
   const postTrack = async () => {
     if (files === undefined) {
       return;
@@ -25,13 +37,15 @@
     let res = await fetch(`${PUBLIC_API_URL}/track`, { body, method: 'POST' });
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
-    meshes.push({ name: files.item(0)!.name, blob, url });
+    const name = files.item(0)!.name.replace('.gpx', '.stl');
+    mesh = { name, data: blob, url };
+
     files = undefined;
     value = '';
-    mesh = await blob.arrayBuffer();
   };
 
-  let mesh: ArrayBuffer | undefined = $state(undefined);
+  let styles = getComputedStyle(document.documentElement);
+  let color = styles.getPropertyValue('--color-base-content');
 </script>
 
 <div class="mt-3 flex flex-col items-center gap-3">
@@ -64,14 +78,19 @@
     {/if}
   </button>
 
-  <h2>Meshes</h2>
-  {#each meshes as mesh}
-    <a href={mesh.url} download={mesh.name.replace('.gpx', '.stl')}
-      >{mesh.name.replace('.gpx', '.stl')}
-    </a>
-  {:else}
-    <i>No mesh yet</i>
-  {/each}
+  {#if mesh !== undefined}
+    <div class="flex flex-row items-center gap-2 p-2">
+      {mesh.name} ({Math.round(mesh.data.size / 1024 / 1024)} MB)
+      <button onclick={() => (showMesh = !showMesh)} class="btn btn-square btn-ghost">
+        <View {color} title="Visualize mesh" /></button
+      >
+      <a href={mesh.url} download={mesh.name} class="btn btn-square btn-ghost">
+        <Download {color} title="Download .stl file" />
+      </a>
+    </div>
+  {/if}
 
-  <MeshViewer {mesh} />
+  {#if showMesh}
+    <MeshViewer {mesh} />
+  {/if}
 </div>
